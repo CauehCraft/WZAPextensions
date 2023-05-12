@@ -15,8 +15,11 @@ const arrobaHtmlRed = '<button data-testid="arroba" class="svlsagor" aria-label=
 
 
 //global
-var stnum = 1;
+var tam = 0;
+var tagados = 0;
+var stnum = 0;
 var tagando = false;
+var iii = 0;
 
 function getElementByXpath(path) {
   return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
@@ -40,34 +43,50 @@ function contarPessoas(){
 	return heightNumber;
 }
 
-async function escreverTexto(nu){
-	//i = 0;
-	main = document.querySelector("#main"),
-	textarea = main.querySelector(`div[contenteditable="true"]`)
-	if(!textarea) throw new Error("Não há uma conversa aberta")
+async function escreverTexto(){
+    //i = 0;
+    main = document.querySelector("#main"),
+    textarea = main.querySelector(`div[contenteditable="true"]`)
+    if(!textarea) throw new Error("Não há uma conversa aberta")
+    //xpath da lista de @s
+    pessoas = getElementByXpath('//*[@id="main"]/footer/div[3]');
+    //xpath de uma pessoa da lista
+	botaoPessoa = getElementByXpath('//*[@id="main"]/footer/div[3]/div/div[1]/div/div');
 
-	// Cria o evento para pressionar a seta para baixo e cima
-    const setaBaixoEvent = new KeyboardEvent("keydown", { key: "ArrowDown", code: "ArrowDown", which: 40, keyCode: 40, bubbles: true });
-	const setaCimaEvent = new KeyboardEvent("keydown", { key: "ArrowUp", code: "ArrowUp", which: 38, keyCode: 38, bubbles: true });
+    textarea.focus();
+    if(tagando == 'pausado'){
+        return;
+    }
+    else {
+        //textarea.dispatchEvent(tabEvent);  style="z-index: 15
+        //botaoPessoa.querySelector('div[style="z-index: '+tagados-tam).querySelector('button[tabindex="0"]').focus();
+        //botaoPessoa.querySelector('div[style="z-index: '+tagados-tam).querySelector('button[tabindex="0"]').click();
+        //botaoPessoa.querySelector('div[data-testid="list-item-'+tagados+'"]').querySelector('button[tabindex="0"]').click();
+        // xpath do botao da pessoa a tagar
+        //*[@id="main"]/footer/div[3]/div/div[1]/div/div/div[1]/button
+    	const elements = botaoPessoa.querySelectorAll('[style]');
 
-    // Cria o evento para pressionar o enter
-    const tabEvent = new KeyboardEvent("keydown", { key: "Tab", code: "Tab", which: 9, keyCode: 9, bubbles: true });
-
-	textarea.focus();
-	if(tagando == 'pausado'){
-		return;
-	}
-	else if(nu==1){
-			textarea.dispatchEvent(setaCimaEvent);
-			textarea.dispatchEvent(new Event('change', {bubbles: true}));
-		} 
-		else {
-			textarea.dispatchEvent(tabEvent);
-			document.execCommand('insertText', false, '@');
-			textarea.dispatchEvent(new Event('change', {bubbles: true}));
-			textarea.dispatchEvent(setaBaixoEvent);
-	}
+    	let transformerY = 'translateY('+stnum+'px)'
+		let targetElement;
+		for (const element of elements) {
+		  //transform: translateY(0px);
+		  if (element.style.transform === transformerY.toString()) {
+		    targetElement = element;
+		    break;
+		  }
+		}
+        
+        //botao_p_tagar = getElementByXpath('//*[@id="main"]/footer/div[3]/div/div[1]/div/div/div['+(tam-tagados)+']/button');
+        targetElement.querySelector('button').focus();
+        targetElement.querySelector('button').click()
+        //setTimeout(function() {targetElement.querySelector('button').click();},100);
+        setTimeout(function() {document.execCommand('insertText', false, '@');},1);
+        textarea.dispatchEvent(new Event('change', {bubbles: true}));
+		stnum += 52;
+		tagados += 1;
+    }
 }
+
 
 function esperarEClicar() {
   //const pessoas = document.getElementsByClassName(listaPessoas);
@@ -85,38 +104,25 @@ function esperarEClicar() {
   //document.getElementsByClassName("botaoArroba")[0].innerHTML = arrobaHtmlRed;
   //tagando = true;
   
-  stnum = 0;
   i = 0, j = 0, k = 0;
-  while(i<(tam)){
-  	setTimeout(function() {
-    	escreverTexto(1);
-    	stnum++;
-    }, 100+i);
-  	i++;
-  }
-
+  stnum = 0;
   function startMarcar(){
-  	if(stnum == tam) {
+  		tagados = 0;
 		while(j<((tam)*2)-1){
 			setTimeout(function() {
-		   		escreverTexto(0);
+		   		escreverTexto();
 		   		k++;
 		   		if(k>((tam)*2)-2){
 					document.getElementsByClassName("botaoArroba")[0].innerHTML = arrobaHtml;
   		    		tagando = false;
 				}
 
-			}, 100+j*75);
+			}, 100+j*55);
 		  	j++;
 		}
 
 		
 	}
-	else {
-	    setTimeout(startMarcar, 100);
-	    return;
-  	}
-  }
   startMarcar();
   
 }
