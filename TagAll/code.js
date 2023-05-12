@@ -158,7 +158,7 @@ function criarBotao() {
     
 }
 
-botabotao = setInterval(criarBotao, 1000);
+//botabotao = setInterval(criarBotao, 1000);
 
 
 
