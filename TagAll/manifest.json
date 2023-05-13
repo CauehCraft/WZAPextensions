@@ -3,7 +3,7 @@
       "default_icon": "images/ico.png"
    },
    "content_scripts": [{
-      "js": ["tagall.js"],
+      "js": ["code.js"],
       "matches": ["https://web.whatsapp.com/*"],
       "run_at": "document_start"
    }],
@@ -15,7 +15,7 @@
    "manifest_version": 3,
    "name": "WZAPtagall",
    "short_name": "WZAPtagall",
-   "version": "1.0",
+   "version": "1.1",
    "web_accessible_resources": [{
       "matches": ["https://web.whatsapp.com/*"],
       "resources": ["images/*"]
